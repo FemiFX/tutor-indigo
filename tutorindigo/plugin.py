@@ -19,17 +19,13 @@ config: t.Dict[str, t.Dict[str, t.Any]] = {
     # Add here your new settings
     "defaults": {
         "VERSION": __version__,
-        "WELCOME_MESSAGE": "The place for all your online learning",
-        "PRIMARY_COLOR": "#3b85ff",  # cool blue
+        "WELCOME_MESSAGE": "Trade your Way to Financial Freedom",
+        "PRIMARY_COLOR": "0A3042",  # PermaFX Brand Color
         # Footer links are dictionaries with a "title" and "url"
         # To remove all links, run:
         # tutor config save --set INDIGO_FOOTER_NAV_LINKS=[]
         "FOOTER_NAV_LINKS": [
             {"title": "About Us", "url": "/about"},
-            {"title": "Blog", "url": "/blog"},
-            {"title": "Donate", "url": "/donate"},
-            {"title": "Terms of Sevice", "url": "/tos"},
-            {"title": "Privacy Policy", "url": "/privacy"},
             {"title": "Help", "url": "/help"},
             {"title": "Contact Us", "url": "/contact"},
         ],
@@ -45,15 +41,15 @@ hooks.Filters.ENV_TEMPLATE_ROOTS.add_item(
 # This is where the theme is rendered in the openedx build directory
 hooks.Filters.ENV_TEMPLATE_TARGETS.add_items(
     [
-        ("indigo", "build/openedx/themes"),
+        ("modified-indigo", "build/openedx/themes"),
     ],
 )
 
 # Force the rendering of scss files, even though they are included in a "partials" directory
 hooks.Filters.ENV_PATTERNS_INCLUDE.add_items(
     [
-        r"indigo/lms/static/sass/partials/lms/theme/",
-        r"indigo/cms/static/sass/partials/cms/theme/",
+        r"modified-indigo/lms/static/sass/partials/lms/theme/",
+        r"modified-indigo/cms/static/sass/partials/cms/theme/",
     ]
 )
 
@@ -62,7 +58,7 @@ hooks.Filters.ENV_PATTERNS_INCLUDE.add_items(
 with open(
     os.path.join(
         str(importlib_resources.files("tutorindigo") / "templates"),
-        "indigo",
+        "modified-indigo",
         "tasks",
         "init.sh",
     ),
@@ -84,9 +80,9 @@ def _override_openedx_docker_image(
         elif k == "MFE_DOCKER_IMAGE":
             mfe_image = v
     if openedx_image:
-        items.append(("DOCKER_IMAGE_OPENEDX", f"{openedx_image}-indigo"))
+        items.append(("DOCKER_IMAGE_OPENEDX", f"{openedx_image}-modified-indigo"))
     if mfe_image:
-        items.append(("MFE_DOCKER_IMAGE", f"{mfe_image}-indigo"))
+        items.append(("MFE_DOCKER_IMAGE", f"{mfe_image}-modified-indigo"))
     return items
 
 
@@ -105,7 +101,7 @@ hooks.Filters.ENV_PATCHES.add_items(
         (
             "mfe-dockerfile-post-npm-install-learning",
             """
-RUN npm install '@edx/brand@npm:@edly-io/indigo-brand-openedx@^1.0.0'
+RUN npm install '@edx/brand@git+https://github.com/FemiFX/modified-tutor.git'
 RUN npm install '@edx/frontend-component-header@npm:@edly-io/indigo-frontend-component-header@^1.0.0'
 RUN npm install '@edx/frontend-component-footer@npm:@edly-io/indigo-frontend-component-footer@^1.0.0'
 """,
@@ -113,7 +109,7 @@ RUN npm install '@edx/frontend-component-footer@npm:@edly-io/indigo-frontend-com
         (
             "mfe-dockerfile-post-npm-install-authn",
             """
-RUN npm install '@edx/brand@npm:@edly-io/indigo-brand-openedx@^1.0.0'
+RUN npm install '@edx/brand@git+https://github.com/FemiFX/modified-tutor.git'
 """,
         ),
         # Tutor-Indigo v2.1 targets the styling updations in discussions and learner-dashboard MFE
@@ -121,7 +117,7 @@ RUN npm install '@edx/brand@npm:@edly-io/indigo-brand-openedx@^1.0.0'
         (
             "mfe-dockerfile-post-npm-install-discussions",
             """
-RUN npm install '@edx/brand@npm:@edly-io/indigo-brand-openedx@^1.0.0'
+RUN npm install '@edx/brand@git+https://github.com/FemiFX/modified-tutor.git'
 RUN npm install '@edx/frontend-component-header@npm:@edly-io/indigo-frontend-component-header@^1.0.0'
 RUN npm install '@edx/frontend-component-footer@npm:@edly-io/indigo-frontend-component-footer@^1.0.0'
 """,
@@ -129,7 +125,7 @@ RUN npm install '@edx/frontend-component-footer@npm:@edly-io/indigo-frontend-com
         (
             "mfe-dockerfile-post-npm-install-learner-dashboard",
             """
-RUN npm install '@edx/brand@npm:@edly-io/indigo-brand-openedx@^1.0.0'
+RUN npm install '@edx/brand@git+https://github.com/FemiFX/modified-tutor.git'
 RUN npm install '@edx/frontend-component-footer@npm:@edly-io/indigo-frontend-component-footer@^1.0.0'
 """,
         ),
